@@ -1,0 +1,4 @@
+# A sample script for synthesize_speech with language "en": one sentence or phrase per line; # lines are skipped.
+# Commas and full stops set the pauses. Spell numbers the way they should be said.
+Hello, and thank you for stopping by.
+Our winter offer runs all December, with twenty percent off every order.

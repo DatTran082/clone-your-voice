@@ -50,10 +50,10 @@ def files(repo):
         with urllib.request.urlopen(f"https://huggingface.co/api/models/{repo}?blobs=true") as r:
             m = json.load(r)
     except urllib.error.HTTPError as e:
-        raise SystemExit(f"Lỗi: Hugging Face trả về {e.code}. Nếu mạng có tường lửa chặn trang này, hãy đổi mạng "
-                         "(vd. 4G) hoặc chép thư mục mô hình từ máy đã cài (xem GUIDE.md).")
+        raise SystemExit(f"Error: Hugging Face returned {e.code}. If a firewall blocks it, switch networks (a phone "
+                         "hotspot, say) or copy the model folders from a machine that has them (see GUIDE.md).")
     except urllib.error.URLError as e:
-        raise SystemExit(f"Lỗi: không kết nối được Hugging Face ({e.reason}).")
+        raise SystemExit(f"Error: cannot reach Hugging Face ({e.reason}).")
     return [(f["rfilename"], f.get("size") or 0) for f in m["siblings"]]
 
 
@@ -108,7 +108,7 @@ def fetch(repo, name, size, dest):
 def main():
     repo, dest, *globs = sys.argv[1:]
     if complete(dest):
-        print(f"đã đủ: {dest}", flush=True)
+        print(f"already complete: {dest}", flush=True)
         return
     for name, size in files(repo):
         if globs and not any(fnmatch.fnmatch(name, g) for g in globs):

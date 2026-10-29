@@ -1,211 +1,215 @@
-# voice-mcp: hướng dẫn sử dụng
+# voice-mcp: user guide
 
-Đây là một **MCP server**, tức một bộ công cụ cắm vào trợ lý AI (Claude Code, Claude Desktop hoặc ứng dụng AI khác hỗ trợ MCP). Sau khi kết nối, bạn chỉ cần nói với AI bằng lời thường, ví dụ "đọc kịch bản này bằng giọng chị Lan", và AI sẽ tự gọi công cụ.
+voice-mcp is an **MCP server**: a set of tools that plugs into an AI assistant (Claude Code, Claude Desktop, or any app that supports MCP). Once it is connected, you ask the assistant in plain words, for example "read this script in Lan's voice", and the assistant calls the tools itself.
 
-Bộ công cụ làm ba việc, chạy hoàn toàn trên máy Mac, không gửi âm thanh đi đâu:
+It does three things, entirely on your Mac; no audio leaves the machine:
 
-1. **Đọc kịch bản thành giọng nói bằng giọng mẫu** (nhân bản giọng, mô hình VoxCPM2).
-   - Mỗi câu đọc vài lần.
-   - Whisper nghe lại và chọn lần đọc ít sai nhất.
-   - Các câu được ghép thành một tệp WAV 48 kHz.
-2. **Lưu giọng mẫu** vào một thư viện có tên, để lần sau chỉ cần gọi tên giọng.
-3. **Nghe chép lời** từ âm thanh hoặc video ra chữ, phụ đề `.srt` và thời gian từng chữ (mô hình Whisper large-v3-turbo).
+1. **Reads a script aloud** in a cloned voice (VoxCPM2). Each line is read a few times, Whisper listens back and picks the take with the fewest mistakes, and the lines are joined into one 48 kHz WAV file.
+2. **Keeps reference voices** in a named library, so later you only need the voice's name.
+3. **Transcribes** audio or video to text, `.srt` subtitles and word timings (Whisper large-v3-turbo).
 
-Dùng được cho nhiều việc: giọng đọc video, quảng cáo, bài giảng, sách nói, tin nhắn thoại, phụ đề cho video có sẵn… Mô hình đọc được khoảng 30 ngôn ngữ; mặc định là tiếng Việt, và với tiếng Việt thì số, ngày, giá tiền được tự đổi thành chữ.
+Use it for anything that needs a voice: video voice-overs, ads, lessons, audiobooks, voice messages, subtitles for existing videos. The model speaks about 30 languages. The default is Vietnamese; in Vietnamese, numbers, dates and prices are spelled out automatically.
 
-## Yêu cầu
+## Requirements
 
-- Máy Mac chip Apple (M1 trở lên). Mô hình chạy bằng MLX nên không dùng được trên Windows hay Mac chip Intel.
-- Khoảng 8 GB ổ đĩa: môi trường Python 1,2 GB, VoxCPM2 4,6 GB, Whisper 1,6 GB. Khi chạy cần khoảng 6 GB RAM trống (kích thước hai mô hình).
-- `uv` và `ffmpeg`. Nếu chưa có, cài bằng `brew install uv ffmpeg`.
-- Mạng xem được huggingface.co, chỉ cần cho lần cài đầu.
+- **Mac:** Apple silicon (M1 or later). The models run on MLX, so Windows and Intel Macs are not supported.
+- **Disk:** about 8 GB (Python env 1.2 GB, VoxCPM2 4.6 GB, Whisper 1.6 GB).
+- **Memory:** about 6 GB of free RAM while running (the size of the two models).
+- **Tools:** `uv` and `ffmpeg`: `brew install uv ffmpeg`.
+- **Network:** access to huggingface.co, for the first install only.
 
-## Cài đặt
+## Install
 
-Lấy gói về bằng một trong hai cách:
+Get the package in one of two ways:
 
-- `git clone https://github.com/DatTran082/voice-mcp.git` (repo riêng tư: chủ repo phải mời bạn vào trước). Cập nhật sau này bằng `git pull`.
-- Giải nén tệp `voice-mcp.zip` được gửi cho bạn.
+- `git clone https://github.com/DatTran082/voice-mcp.git`. Update later with `git pull`.
+- Unzip a `voice-mcp.zip` someone sent you.
 
-Rồi chạy:
+Then run:
 
 ```bash
 cd voice-mcp
 ./install.sh
 ```
 
-Script làm bốn việc:
+The script:
 
-1. Tạo môi trường Python 3.12 với đúng các phiên bản trong `requirements.txt`.
-2. Tải hai mô hình về `~/.cache/voice-mcp/`.
-3. Thử khởi động server.
-4. In ra lệnh để kết nối với AI.
+1. creates a Python 3.12 env with the exact versions in `requirements.txt`;
+2. downloads the two models into `~/.cache/voice-mcp/`;
+3. checks that the server starts;
+4. prints the command that connects it to your AI.
 
-Chạy lại lúc nào cũng được: phần đã có thì giữ nguyên, tải dở thì tải tiếp. Chạy `./install.sh --test` thì script còn đọc thử hai câu qua server (mất khoảng 1 phút).
+It is safe to run again: what is already there is kept, and interrupted downloads resume. `./install.sh --test` also reads two lines aloud through the server (about a minute).
 
-**Nếu mạng chặn Hugging Face** (mạng công ty có tường lửa sẽ báo "Hugging Face trả về 403"), có hai cách:
+**If your network blocks Hugging Face** (behind a corporate firewall, the install reports "Hugging Face returned 403"), there are two ways around it:
 
-- Đổi sang mạng khác (ví dụ phát 4G từ điện thoại) rồi chạy lại `./install.sh`.
-- Chép hai thư mục `VoxCPM2-bf16` và `whisper-turbo` từ một máy đã cài vào `~/.cache/voice-mcp/` của máy mới, rồi chạy `./install.sh`.
+- Switch networks (a phone hotspot, for example) and run `./install.sh` again.
+- Copy the `VoxCPM2-bf16` and `whisper-turbo` folders from a machine that has them into `~/.cache/voice-mcp/` on the new one, then run `./install.sh`. It sees the models are complete and only builds the Python env.
 
-## Kết nối với AI
+## Connect to your AI
 
-**Claude Code** (làm một lần):
+**Claude Code**, once:
 
 ```bash
-claude mcp add --scope user voice -- ~/Documents/voice-mcp/voice-mcp
+claude mcp add --scope user voice -- ~/voice-mcp/voice-mcp      # use the folder you installed into
 ```
 
-Sau đó mở phiên Claude Code mới. Lệnh `claude mcp list` sẽ thấy `voice` ở trạng thái đã kết nối.
+Open a new Claude Code session. `claude mcp list` should show `voice` as connected.
 
-**Claude Desktop:** mở tệp `~/Library/Application Support/Claude/claude_desktop_config.json` và thêm vào mục `mcpServers` (thay `<tên-máy>` bằng tên người dùng trên máy), rồi khởi động lại Claude Desktop:
+**Claude Desktop:** open `~/Library/Application Support/Claude/claude_desktop_config.json`, add the server under `mcpServers` (with your own path), and restart Claude Desktop:
 
 ```json
 {
   "mcpServers": {
     "voice": {
-      "command": "/Users/<tên-máy>/Documents/voice-mcp/voice-mcp"
+      "command": "/Users/<you>/voice-mcp/voice-mcp"
     }
   }
 }
 ```
 
-**Ứng dụng AI khác hỗ trợ MCP:** khai báo một server kiểu stdio với lệnh là đường dẫn tới `voice-mcp`, không cần tham số.
+**Other MCP clients:** add a stdio server whose command is the path to `voice-mcp`, with no arguments.
 
-## Cách dùng: nói với AI
+## Using it: talk to your AI
 
-Ví dụ những câu có thể nói:
+Things you can say:
 
-- "Kiểm tra bộ công cụ giọng nói đã sẵn sàng chưa."
-- "Lưu giọng chị Lan từ tệp ~/Downloads/lan.m4a, đoạn từ giây 12 đến giây 28. Chị Lan đã đồng ý cho nhân bản giọng."
-- "Đọc kịch bản này bằng giọng lan, mỗi câu 4 lần, rồi ghép lại: …"
-- "Đọc thử câu 'Chào bạn, hôm nay uống gì nè?' bằng giọng lan nhưng vui tươi, nhanh hơn."
-- "Tạo một giọng nam trầm, ấm, đọc chậm để đọc câu này."
-- "Chép lời video ~/Movies/clip.mp4 ra phụ đề."
-- "Từ 'Matcha' đọc là 'Mát-cha'."
+- "Check whether the voice tools are ready."
+- "Save Lan's voice from ~/Downloads/lan.m4a, from second 12 to second 28. Lan agreed to have her voice cloned."
+- "Read this script in the voice lan, 4 takes per line, and join them: …"
+- "Read 'Hi, what would you like to drink today?' in lan's voice, but cheerful and a bit faster."
+- "Make a deep, warm, slow male voice and read this line with it."
+- "Transcribe ~/Movies/clip.mp4 into subtitles."
+- "'Matcha' should be read as 'Mát-cha'."
 
-AI được dặn sẵn quy trình sau:
+The assistant is given this workflow by the server:
 
-1. Xem các giọng đã lưu.
-2. Lưu giọng mới, nhưng chỉ khi bạn xác nhận người đó đã đồng ý.
-3. Đưa bạn xem bản chép lời nháp của giọng mẫu và sửa cho đúng từng chữ.
-4. Đọc kịch bản.
-5. Báo lại các tệp, kèm lời nhắc nghe lại trước khi dùng và gắn nhãn AI khi đăng.
+1. Check the saved voices.
+2. Save a new voice only after you confirm the speaker agreed.
+3. Show you the draft transcript of the reference so you can correct it word for word.
+4. Read the script.
+5. Report the files, with a reminder to listen before use and to label AI content when posting.
 
-### Viết kịch bản cho dễ đọc
+### Writing a script that reads well
 
-- **Mỗi dòng một câu hoặc một vế.** Dấu phẩy ngắt hơi ngắn, dấu chấm ngắt dài. Dòng bắt đầu bằng `#` bị bỏ qua.
-- **Số, ngày, giá tiền tự đổi thành chữ trước khi đọc:**
-  - "30/11" thành "ba mươi tháng mười một";
-  - "25.000đ" và "25k" thành "hai mươi lăm nghìn đồng" và "hai mươi lăm nghìn";
-  - "10%" thành "mười phần trăm".
+- **One sentence or phrase per line.** A comma is a short pause, a full stop a longer one. Lines starting with `#` are skipped.
+- **Vietnamese numbers, dates and prices are spelled out before reading:**
+  - "30/11" becomes "ba mươi tháng mười một";
+  - "25.000đ" and "25k" become "hai mươi lăm nghìn đồng" and "hai mươi lăm nghìn";
+  - "10%" becomes "mười phần trăm".
 
-  Kết quả trả về có dòng `spoken` cho biết từng câu thực sự được đọc thế nào.
-- **Tên riêng, từ nước ngoài:** bảo AI "từ X đọc là Y" để thêm vào bảng cách đọc của bạn. Bảng này áp dụng cho mọi kịch bản về sau.
+  The result's `spoken` field shows how each line was actually read.
+- **Names and foreign words:** tell the assistant "X is read as Y" and it adds that to your pronunciation list. The list applies to every script from then on.
 
-### Giọng mẫu tốt
+### A good reference voice
 
-- chỉ một người nói, không có nhạc nền, tiếng ồn hay tiếng vang phòng;
-- giọng tự nhiên, đúng cách đọc bạn muốn (đọc thơ thì lấy đoạn đọc thơ, nói chuyện thì lấy đoạn nói chuyện);
-- dài 10–20 giây, cắt trọn câu;
-- **lời mẫu đúng từng chữ, từng dấu.** Whisper chép nháp và hay nhầm (ví dụ "chùm hoa" thành "chuồng hoa"). Kiểu đọc `clone` bám theo lời này, lời sai thì giọng lệch.
+- one speaker, no background music, noise or room echo;
+- natural, in the manner you want (a poem reading for poems, conversation for conversation);
+- 10–20 seconds long, cut on whole sentences;
+- **a transcript that is exact, word for word, with the right accents.** Whisper's draft is often wrong (for example "chùm hoa" heard as "chuồng hoa"). `clone` mode follows this transcript; mistakes in it make the voice drift.
 
-## Các công cụ
+## Tools
 
-Phần này để tra cứu; AI tự chọn công cụ và tham số.
+For reference; the assistant picks the tools and parameters itself.
 
-| Công cụ | Làm gì | Tham số chính |
+| Tool | What it does | Main parameters |
 |---|---|---|
-| `voice_status` | Kiểm tra mô hình, ffmpeg, danh sách giọng, bảng cách đọc, thư mục ghi tệp | không có |
-| `list_voices` | Các giọng đã lưu | không có |
-| `register_voice` | Lưu một đoạn giọng mẫu dưới một tên (ghi đè giọng cùng tên) | `name`, `audio_path`, `consent_confirmed` (bắt buộc đúng), `start_seconds`, `end_seconds`, `transcript`, `notes` |
-| `set_voice_transcript` | Sửa lời mẫu cho đúng từng chữ | `name`, `transcript` |
-| `set_pronunciation` | Thêm hoặc sửa cách đọc một từ | `word`, `spoken` |
-| `synthesize_speech` | Đọc kịch bản | `script`, `voice`, `mode`, `style`, `takes`, `score`, `join`, `pause_seconds`, `output_dir`, `seed`, `steps`, `cfg` |
-| `transcribe_audio` | Chép lời âm thanh hoặc video | `audio_path`, `language`, `output_dir`, `formats` |
+| `voice_status` | Checks the models, ffmpeg, saved voices, pronunciation list and output folder | none |
+| `list_voices` | Lists the saved voices | none |
+| `register_voice` | Saves a reference clip under a name (replaces a voice of the same name) | `name`, `audio_path`, `consent_confirmed` (must be true), `start_seconds`, `end_seconds`, `transcript`, `notes` |
+| `set_voice_transcript` | Sets the reference's exact transcript | `name`, `transcript` |
+| `set_pronunciation` | Adds or changes how a word is read | `word`, `spoken` |
+| `synthesize_speech` | Reads a script aloud | `script`, `voice`, `mode`, `style`, `takes`, `score`, `join`, `pause_seconds`, `output_dir`, `seed`, `steps`, `cfg`, `language` |
+| `transcribe_audio` | Transcribes audio or video | `audio_path`, `language`, `output_dir`, `formats` |
 
-Ba kiểu đọc của `synthesize_speech` (`mode`):
+The three modes of `synthesize_speech`:
 
-| Kiểu | Cần gì | Khi nào dùng |
+| `mode` | Needs | Use it for |
 |---|---|---|
-| `clone` (mặc định) | Giọng đã lưu, có lời mẫu đúng | Giống giọng mẫu nhất, cả âm sắc lẫn cách ngắt nghỉ. Giọng đọc của video giới thiệu dùng kiểu này. |
-| `clone_style` | Giọng đã lưu và `style` | Giữ âm sắc của mẫu nhưng đổi cách đọc, ví dụ `"warm, gentle, smiling, unhurried"` |
-| `design` | Chỉ `style` | Tạo một giọng mới từ mô tả, không cần mẫu, ví dụ `"A young woman's voice, warm and bright, speaking slowly"` |
+| `clone` (default) | A saved voice with an exact transcript | The closest match to the reference: timbre and phrasing |
+| `clone_style` | A saved voice and a `style` | The reference's timbre read another way, e.g. `"warm, gentle, smiling, unhurried"` |
+| `design` | A `style` only | A new voice from a description, no reference, e.g. `"A young woman's voice, warm and bright, speaking slowly"` |
 
-Mô tả giọng (`style`) viết bằng tiếng Anh cho kết quả ổn định nhất. Kịch bản thì vẫn viết tiếng Việt.
+Write `style` in English for the most stable results; the script itself can be in any supported language.
 
-Các tham số khác:
-- `takes` (1–8, mặc định 3): số lần đọc mỗi câu.
-- `steps` (4–32, mặc định 16): 10 thì nhanh hơn, 16 thì tiếng sạch hơn.
-- `cfg` (2,0–4,0, mặc định 2,0): cao hơn thì bám chữ và giọng chặt hơn, nhưng có thể cứng giọng.
-- `seed` (mặc định 1000): cùng câu, cùng giọng, cùng `seed` thì đọc ra y hệt.
+Other parameters:
 
-## Kết quả
+| Parameter | Range | Default | Effect |
+|---|---|---|---|
+| `takes` | 1–8 | 3 | Readings per line. |
+| `steps` | 4–32 | 16 | Denoising steps: 10 is faster, 16 cleaner. |
+| `cfg` | 2.0–4.0 | 2.0 | Higher follows the text and voice more tightly, but may sound stiffer. |
+| `seed` | any | 1000 | The same line, voice and seed reproduce a take exactly. |
+| `language` | language code | `vi` | Language for scoring and spelling out numbers; `""` lets Whisper detect it. |
 
-Mỗi lần đọc tạo một thư mục mới trong `~/Documents/voice-mcp-output/`, tên gồm ngày giờ và tên giọng. AI cũng có thể ghi vào thư mục bạn chỉ định.
+## Output
 
-| Tệp | Là gì |
+Each run creates a new folder in `~/Documents/voice-mcp-output/`, named with the date, time and voice. The assistant can also write to a folder you name.
+
+| File | What it is |
 |---|---|
-| `line-01_0.wav`, `line-01_1.wav`… | Từng lần đọc của từng câu |
-| `line-01_best.wav`… | Lần ít sai nhất của mỗi câu |
-| `joined.wav` | Cả bài: các lần tốt nhất, cắt khoảng lặng, cân âm lượng, nghỉ 0,5 giây giữa các câu |
-| `SCORES.md` | Bảng chấm: số tiếng Whisper nghe khác câu gốc (tính cả dấu thanh), độ dài, Whisper nghe được gì |
-| `result.json` | Toàn bộ kết quả, để AI hoặc script khác đọc lại |
+| `line-01_0.wav`, `line-01_1.wav`… | Every take of every line |
+| `line-01_best.wav`… | Each line's take with the fewest mistakes |
+| `joined.wav` | The whole script: best takes, silence trimmed, levels matched, 0.5 s between lines |
+| `SCORES.md` | The scores: words Whisper heard differently from the line (accents count), length, what Whisper heard |
+| `result.json` | The full result, for the assistant or another script |
 
-**Luôn nghe lại trước khi dùng.** Bảng chấm chỉ giúp xếp hạng, vì chính Whisper cũng nghe nhầm, nhất là tên riêng và thơ. Giọng có hợp hay không thì phải nghe bằng tai. Nếu thích một lần đọc khác lần được chọn, cứ dùng tệp `line-NN_<lần>.wav` đó.
+**Always listen before use.** The scores only rank the takes; Whisper mishears too, especially names and verse. Whether a voice fits is for your ears to judge. If you prefer a take other than the chosen one, use its `line-NN_<take>.wav`.
 
-Tốc độ đo trên MacBook Pro M5, 24 GB:
-- lần gọi đầu nạp mô hình mất vài giây, các lần sau mô hình đã nạp sẵn;
-- mỗi lần đọc một câu ngắn (khoảng 3 giây giọng) mất khoảng 15 giây;
-- chấm mỗi lần đọc mất khoảng 3 giây.
+Speed, measured on a MacBook Pro M5 with 24 GB:
+- **First call:** a few seconds to load the models. They stay loaded after that.
+- **Reading:** about 15 s per take of a short line (about 3 s of speech).
+- **Scoring:** about 3 s per take.
 
-Đọc 2 câu × 2 lần, có chấm và ghép, hết khoảng 1 phút.
+Two lines × two takes with scoring and joining take about a minute.
 
-## Lỗi thường gặp
+## Troubleshooting
 
-| Hiện tượng | Cách xử lý |
+| Symptom | What to do |
 |---|---|
-| AI không thấy công cụ `voice` | Kiểm tra `claude mcp list`, mở phiên mới. Chạy `./install.sh` để xem server khởi động được không. |
-| "Hugging Face trả về 403" khi cài | Mạng chặn trang tải mô hình. Xem phần Cài đặt. |
-| "Only voices whose speaker agreed…" | AI cần bạn xác nhận người nói đã đồng ý trước khi lưu giọng. |
-| Giọng ra không giống mẫu | Dùng mẫu sạch hơn, dài 10–20 giây. Kiểm tra lại lời mẫu đúng từng chữ. |
-| Đọc sai dấu hoặc sai một chữ | Đọc thêm vài lần (`takes` 5–6). Thêm dấu phẩy để tách chữ khó. Thêm cách đọc bằng `set_pronunciation`. |
-| Kịch bản dài bị ngắt giữa chừng | Chia kịch bản thành nhiều lần gọi hoặc giảm `takes`. Với Claude Code, có thể đặt thời gian chờ dài hơn bằng biến `MCP_TOOL_TIMEOUT` (mili giây) trước khi mở. |
-| Máy chậm hoặc nóng | Giảm `steps` xuống 10, đọc ít lần hơn, đóng ứng dụng nặng (Blender…). |
+| The assistant does not see the `voice` tools | Check `claude mcp list` and open a new session. Run `./install.sh` to see whether the server starts. |
+| "Hugging Face returned 403" during install | Your network blocks the model downloads. See Install. |
+| "Only voices whose speaker agreed…" | The assistant needs your confirmation that the speaker consented before saving a voice. |
+| The voice does not sound like the reference | Use a cleaner reference of 10–20 s. Check that the transcript is exact. |
+| A wrong accent or word | Read more takes (`takes` 5–6). Add a comma to separate the hard word. Add a pronunciation with `set_pronunciation`. |
+| Long scripts stop halfway | Split the script into several calls or lower `takes`. In Claude Code you can raise the tool timeout with the `MCP_TOOL_TIMEOUT` environment variable (milliseconds) before starting it. |
+| The Mac is slow or hot | Lower `steps` to 10, read fewer takes, close heavy apps. |
 
-## Giấy phép và lưu ý khi dùng
+## Licences and responsible use
 
-- **Giấy phép:** cả hai mô hình và các thư viện đều dùng thương mại được.
+**Licences:** both models and all libraries allow commercial use.
 
-  | Thành phần | Nguồn | Giấy phép |
-  |---|---|---|
-  | VoxCPM2 | OpenBMB; bản MLX `mlx-community/VoxCPM2-bf16` | Apache-2.0 |
-  | Whisper large-v3-turbo | OpenAI; bản MLX `mlx-community/whisper-large-v3-turbo` | MIT |
-  | `mlx`, `mlx-audio`, `mlx-whisper`, MCP Python SDK (`mcp`) | | MIT |
-- **Chỉ nhân bản giọng của người đã đồng ý.** Công cụ không cho lưu giọng khi chưa xác nhận điều này. Không dùng giọng nhân bản để giả làm người khác, và không dùng giọng người nổi tiếng.
-- **Bài đăng có giọng nhân bản phải gắn nhãn nội dung AI** theo quy định của nền tảng (TikTok, Facebook, YouTube).
+| Component | Source | Licence |
+|---|---|---|
+| VoxCPM2 | OpenBMB; MLX build `mlx-community/VoxCPM2-bf16` | Apache-2.0 |
+| Whisper large-v3-turbo | OpenAI; MLX build `mlx-community/whisper-large-v3-turbo` | MIT |
+| `mlx`, `mlx-audio`, `mlx-whisper`, MCP Python SDK (`mcp`) | | MIT |
 
-## Các tệp
+**Clone only the voices of people who agreed.** The tool refuses to save a voice until that is confirmed. Do not use a cloned voice to impersonate anyone, and do not clone public figures.
 
-Trong thư mục `voice-mcp/`:
+**Content with a cloned voice must carry the AI-content label** that the platform requires (TikTok, Facebook, YouTube…).
 
-| Tệp | Là gì |
+## Files
+
+In the `voice-mcp/` folder:
+
+| File | What it is |
 |---|---|
-| `voice-mcp` | Lệnh khởi động server (dùng môi trường Python của bộ công cụ) |
-| `server.py` | Khai báo các công cụ MCP và lời dặn quy trình cho AI |
-| `voice_core.py` | Phần xử lý: chép lời, thư viện giọng, đọc, chấm, ghép |
-| `vi_numbers.py` | Đọc số, ngày, giá tiền thành chữ tiếng Việt |
-| `pronunciations.txt` | Mẫu bảng cách đọc (đi kèm gói, để trống) |
-| `install.sh` | Cài môi trường, tải mô hình, kiểm tra server |
-| `download_model.py` | Tải mô hình từ Hugging Face bằng nhiều luồng, tải tiếp được khi đứt |
-| `selftest.py` | Bài thử: khởi động server như một ứng dụng AI, đọc hai câu, chép lời lại |
-| `requirements.txt` | Phiên bản các thư viện đã chạy được |
-| `examples/sentences.txt` | Kịch bản mẫu |
+| `voice-mcp` | Starts the server with the tools' own Python env |
+| `server.py` | The MCP tools and the workflow instructions for the assistant |
+| `voice_core.py` | The engine: transcription, voice library, reading, scoring, joining |
+| `vi_numbers.py` | Vietnamese numbers, dates and prices in words |
+| `pronunciations.txt` | A template pronunciation list shipped with the package (empty) |
+| `install.sh` | Installs the env, downloads the models, checks the server |
+| `download_model.py` | Downloads models from Hugging Face over parallel connections, resuming if interrupted |
+| `selftest.py` | A check that starts the server as an AI client would, reads two lines and transcribes them back |
+| `requirements.txt` | The library versions known to work |
+| `examples/script-vi.txt`, `examples/script-en.txt` | Sample scripts in Vietnamese and English |
 
-Dữ liệu nằm ngoài thư mục này, trong `~/.cache/voice-mcp/` (đổi bằng biến `VOICE_MCP_HOME`):
-- `mlx-env/`: môi trường Python;
-- `VoxCPM2-bf16/`, `whisper-turbo/`: hai mô hình;
-- `voices/<tên>/`: mỗi giọng đã lưu gồm `reference.wav`, `reference.txt` và `voice.json`;
-- `pronunciations.txt`: bảng cách đọc của bạn (`set_pronunciation` ghi vào đây; ưu tiên hơn bảng đi kèm gói).
+**Data** lives outside the package, in `~/.cache/voice-mcp/` (change it with `VOICE_MCP_HOME`):
+- `mlx-env/`: the Python env;
+- `VoxCPM2-bf16/` and `whisper-turbo/`: the two models;
+- `voices/<name>/`: each saved voice, as `reference.wav`, `reference.txt` and `voice.json`;
+- `pronunciations.txt`: your own pronunciation list. `set_pronunciation` writes here, and it takes precedence over the package's.
 
-Âm thanh tạo ra nằm trong `~/Documents/voice-mcp-output/` (đổi bằng biến `VOICE_MCP_OUTPUT`).
+**Generated audio** goes to `~/Documents/voice-mcp-output/` (change it with `VOICE_MCP_OUTPUT`).
