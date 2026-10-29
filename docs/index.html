@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>clone-your-voice: listen to the samples</title>
+<meta name="description" content="A 16-second recording, and the voice cloned from it saying new things in Vietnamese and English. Made locally on a Mac with clone-your-voice.">
+<style>
+  :root { --ink: #1d1d1f; --soft: #6e6e73; --line: #e5e5ea; --card: #fff; --bg: #f5f5f7; --accent: #0071e3; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 17px/1.55 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+         color: var(--ink); background: var(--bg); }
+  main { max-width: 760px; margin: 0 auto; padding: 56px 20px 72px; }
+  h1 { font-size: 40px; line-height: 1.1; margin: 0 0 12px; letter-spacing: -0.02em; }
+  .lead { font-size: 20px; color: var(--soft); margin: 0 0 36px; }
+  h2 { font-size: 15px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--soft); margin: 40px 0 12px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 20px 22px; margin: 0 0 14px; }
+  .card h3 { margin: 0 0 4px; font-size: 19px; }
+  .meta { color: var(--soft); font-size: 15px; margin: 0 0 12px; }
+  audio { width: 100%; margin: 4px 0 10px; }
+  .said { margin: 0; font-size: 16px; }
+  .en { margin: 6px 0 0; font-size: 15px; color: var(--soft); font-style: italic; }
+  .verse { white-space: pre-line; }
+  .tag { display: inline-block; font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 999px; margin-left: 6px;
+         vertical-align: 2px; background: #e8f1fd; color: var(--accent); }
+  .tag.ref { background: #f0f0f2; color: var(--soft); }
+  .cta { display: inline-block; margin-top: 8px; padding: 10px 18px; border-radius: 999px; background: var(--accent);
+         color: #fff; text-decoration: none; font-weight: 600; }
+  footer { margin-top: 44px; color: var(--soft); font-size: 14px; }
+  footer a, p a { color: var(--accent); }
+</style>
+</head>
+<body>
+<main>
+  <h1>clone-your-voice</h1>
+  <p class="lead">Sixteen seconds of a real voice, and that voice cloned to say things it never said: in Vietnamese,
+    in English, and in a 26-second poem. Everything was made locally on a Mac with Apple silicon: no cloud, no API key.</p>
+
+  <h2>The reference</h2>
+  <div class="card">
+    <h3>Original recording <span class="tag ref">real voice</span></h3>
+    <p class="meta">16 s · Vietnamese · the only audio the clone was given</p>
+    <audio controls preload="none" src="samples/original.mp3"></audio>
+    <p class="said">Tình chúng ta bắt đầu khi mùa thu trở lại, khi những chùm hoa thạch thảo ngát hương trên những lối đi quen. Mùa thu bắt đầu trên dòng sông bát ngát, mùa thu nhuộm vàng những cánh rừng.</p>
+    <p class="en">Our love begins when autumn returns, when clusters of heather scent the familiar paths. Autumn begins on the wide river; autumn turns the forests gold.</p>
+  </div>
+
+  <h2>The clone</h2>
+  <div class="card">
+    <h3>A new sentence <span class="tag">cloned</span></h3>
+    <p class="meta">5 s · Vietnamese · best of 4 takes, picked automatically by Whisper</p>
+    <audio controls preload="none" src="samples/clone-vi.mp3"></audio>
+    <p class="said">Giọng nói này được nhân bản hoàn toàn trên máy tính cá nhân, chỉ từ mười sáu giây ghi âm.</p>
+    <p class="en">This voice was cloned entirely on a personal computer, from just sixteen seconds of recording.</p>
+  </div>
+  <div class="card">
+    <h3>Speaking English <span class="tag">cloned · cross-lingual</span></h3>
+    <p class="meta">8 s · English · the reference has no English in it</p>
+    <audio controls preload="none" src="samples/clone-en.mp3"></audio>
+    <p class="said">This voice was cloned entirely on a Mac, from just sixteen seconds of recorded speech.</p>
+  </div>
+  <div class="card">
+    <h3>Reading a poem <span class="tag">cloned</span></h3>
+    <p class="meta">26 s · Vietnamese · eight lines, each read several times, the best takes joined</p>
+    <audio controls preload="none" src="samples/clone-poem.mp3"></audio>
+    <p class="said verse">Sương giăng đầu núi, nắng hong đồi,
+Cánh hoa theo gió khẽ rong chơi.
+Mây trắng ngủ quên bên triền lá,
+Suối hát ngân nga giữa đất trời.
+Từ ngàn hương lá, từ hoa thơm,
+Chắt chiu vị ngọt, gửi tâm hồn.
+Một ngụm trà đưa ta về lại
+Miền xanh cổ tích thuở còn thơ.</p>
+    <p class="en verse">Mist hangs on the peaks, the sun warms the hills,
+A petal drifts and plays upon the breeze.
+White clouds fall asleep beside the leafy slopes,
+A brook sings softly between earth and sky.
+From a thousand scents of leaves, from fragrant flowers,
+Sweetness gathered drop by drop, sent to the soul.
+One sip of tea carries us back
+To the green fairy-tale land of childhood.</p>
+  </div>
+
+  <p>Clone your own voice: an MCP server for Claude and other AI assistants, built on VoxCPM2 and Whisper
+    large-v3-turbo, running on MLX.</p>
+  <a class="cta" href="https://github.com/DatTran082/clone-your-voice">Get it on GitHub</a>
+
+  <footer>
+    The reference voice is shared with the speaker's permission. Clone only your own voice or the voices of people who
+    agreed, and label content that uses a cloned voice as AI-generated.
+    Code: <a href="https://github.com/DatTran082/clone-your-voice/blob/main/LICENSE">MIT</a>.
+  </footer>
+</main>
+</body>
+</html>

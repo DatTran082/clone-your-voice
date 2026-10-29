@@ -6,3 +6,5 @@ __pycache__/
 *.mp3
 *.m4a
 voice-mcp-output/
+# the published demo samples are the exception
+!docs/samples/*.mp3
