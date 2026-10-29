@@ -1,0 +1,4 @@
+# A script for synthesize_speech: one sentence or phrase per line; lines starting with # are skipped.
+# Commas and full stops set the pauses; numbers, dates and prices are read out in Vietnamese words.
+Xin chào, cảm ơn bạn đã ghé thăm.
+Chương trình ưu đãi kéo dài từ 01/12 đến 31/12, giảm 20% cho mọi đơn hàng.

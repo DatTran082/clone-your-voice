@@ -1,0 +1,6 @@
+#!/bin/zsh
+# Starts the voice MCP server (stdio) with the tools' own Python env, made by install.sh.
+H=${VOICE_MCP_HOME:-$HOME/.cache/voice-mcp}
+PY=$H/mlx-env/bin/python
+[[ -x $PY ]] || { echo "Not installed: run ${0:A:h}/install.sh first." >&2; exit 1 }
+exec $PY "${0:A:h}/server.py" "$@"

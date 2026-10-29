@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.DS_Store
+# generated audio and transcripts never belong in the repo
+*.wav
+*.mp3
+*.m4a
+voice-mcp-output/

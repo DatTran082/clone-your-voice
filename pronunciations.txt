@@ -1,0 +1,5 @@
+# How to say words the model reads wrong. One per line: Word as written = how to say it
+# Applied before reading (case-insensitive, whole words only). Your own list, filled by the set_pronunciation tool,
+# is $VOICE_MCP_HOME/pronunciations.txt (default ~/.cache/voice-mcp/) and wins over this one. Examples:
+# Matcha = Mát-cha
+# Wi-Fi = Oai-phai
