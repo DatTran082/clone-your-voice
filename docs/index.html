@@ -34,7 +34,7 @@
 <main>
   <h1>clone-your-voice</h1>
   <p class="lead">Sixteen seconds of a real voice, and that voice cloned to say things it never said: in Vietnamese,
-    in English, and reading a short poem. Everything was made locally on a Mac with Apple silicon: no cloud, no API key.</p>
+    in English, and reading a poem over music. Everything was made locally on a Mac with Apple silicon: no cloud, no API key.</p>
 
   <h2>The reference</h2>
   <div class="card">
@@ -60,25 +60,29 @@
     <p class="said">This voice was cloned entirely on a Mac, from just sixteen seconds of recorded speech.</p>
   </div>
   <div class="card">
-    <h3>Reading a poem <span class="tag">cloned</span></h3>
-    <p class="meta">15 s · Vietnamese · a six-line <i>lục bát</i> poem, each line read 5 times, the best takes joined</p>
+    <h3>Reading a poem, with music <span class="tag">cloned</span></h3>
+    <p class="meta">31 s · Vietnamese · an eight-line <i>lục bát</i> poem, each line read 5 times, the best takes joined,
+      over a quiet piano that steps back while the voice speaks</p>
     <audio controls preload="none" src="samples/clone-poem.mp3"></audio>
-    <p class="said verse">Núi cao mây phủ quanh năm,
-Lá chè chưa hái còn nằm trên cây.
-
-Gió đưa hương ngát về đây,
-Ly chưa ai uống thì đầy nguyên ly.
-
-Xuân qua hạ tới thu đi
-Trà còn nguyên vị, đợi khi người về.</p>
-    <p class="en verse">Clouds wrap the high mountains all year round,
-The tea leaves, still unpicked, rest upon the bough.
-
-The wind carries their fragrance here,
-The cup no one has sipped is still full to the brim.
-
-Spring passes, summer comes, autumn goes,
-The tea keeps all its flavour, waiting for the day you return.</p>
+    <p class="said verse">Sông sâu nước chảy đá mòn,
+Hồi xưa còn nhỏ, sau này lớn lên.
+Đường xa mấy ngả chẳng quên
+Chén trà mẹ rót ngồi bên hiên nhà.
+Bây giờ con đã đi xa,
+Mỗi lần nâng chén lại là nhớ quê.
+Sông kia chảy mãi chẳng về,
+Mà hương trà cũ vẫn kề bên con.</p>
+    <p class="en verse">Deep rivers flow, and water wears the stones away;
+Once I was small, and then I grew up.
+Down every far road I never forget
+The cup of tea Mother poured, sitting on the porch.
+Now I have gone far away,
+And every time I raise a cup, I miss home.
+That river flows on and never returns,
+Yet the scent of that old tea stays close beside me.</p>
+    <p class="meta" style="margin:12px 0 0">Music: “Gymnopedie No 1” (Erik Satie), performed by Kevin MacLeod
+      (<a href="https://incompetech.com">incompetech.com</a>), licensed under
+      <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons: By Attribution 4.0</a>.</p>
   </div>
 
   <p>Clone your own voice: an MCP server for Claude and other AI assistants, built on VoxCPM2 and Whisper
