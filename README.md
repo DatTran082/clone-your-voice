@@ -18,7 +18,7 @@ Give it 10–20 seconds of someone speaking (with their permission) and a script
 | **Original recording** (Vietnamese; the only audio the clone was given) | 16 s | [original.mp3](docs/samples/original.mp3) |
 | **Clone:** a new Vietnamese sentence, best of 4 takes | 5 s | [clone-vi.mp3](docs/samples/clone-vi.mp3) |
 | **Clone:** speaking English (the reference has no English in it) | 8 s | [clone-en.mp3](docs/samples/clone-en.mp3) |
-| **Clone:** reading an eight-line poem | 26 s | [clone-poem.mp3](docs/samples/clone-poem.mp3) |
+| **Clone:** reading a six-line *lục bát* poem, best of 5 takes per line | 15 s | [clone-poem.mp3](docs/samples/clone-poem.mp3) |
 
 The reference voice is shared with the speaker's permission.
 
