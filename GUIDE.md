@@ -1,6 +1,6 @@
-# voice-mcp: user guide
+# clone-your-voice: user guide
 
-voice-mcp is an **MCP server**: a set of tools that plugs into an AI assistant (Claude Code, Claude Desktop, or any app that supports MCP). Once it is connected, you ask the assistant in plain words, for example "read this script in Lan's voice", and the assistant calls the tools itself.
+clone-your-voice is an **MCP server**: a set of tools that plugs into an AI assistant (Claude Code, Claude Desktop, or any app that supports MCP). Once it is connected, you ask the assistant in plain words, for example "read this script in Lan's voice", and the assistant calls the tools itself.
 
 It does three things, entirely on your Mac; no audio leaves the machine:
 
@@ -22,13 +22,13 @@ Use it for anything that needs a voice: video voice-overs, ads, lessons, audiobo
 
 Get the package in one of two ways:
 
-- `git clone https://github.com/DatTran082/voice-mcp.git`. Update later with `git pull`.
-- Unzip a `voice-mcp.zip` someone sent you.
+- `git clone https://github.com/DatTran082/clone-your-voice.git`. Update later with `git pull`.
+- Unzip a `clone-your-voice.zip` someone sent you.
 
 Then run:
 
 ```bash
-cd voice-mcp
+cd clone-your-voice
 ./install.sh
 ```
 
@@ -51,7 +51,7 @@ It is safe to run again: what is already there is kept, and interrupted download
 **Claude Code**, once:
 
 ```bash
-claude mcp add --scope user voice -- ~/voice-mcp/voice-mcp      # use the folder you installed into
+claude mcp add --scope user voice -- ~/clone-your-voice/voice-mcp      # use the folder you installed into
 ```
 
 Open a new Claude Code session. `claude mcp list` should show `voice` as connected.
@@ -62,7 +62,7 @@ Open a new Claude Code session. `claude mcp list` should show `voice` as connect
 {
   "mcpServers": {
     "voice": {
-      "command": "/Users/<you>/voice-mcp/voice-mcp"
+      "command": "/Users/<you>/clone-your-voice/voice-mcp"
     }
   }
 }
@@ -191,7 +191,7 @@ Two lines × two takes with scoring and joining take about a minute.
 
 ## Files
 
-In the `voice-mcp/` folder:
+In the `clone-your-voice/` folder (the server itself is called `voice`, its launcher `voice-mcp`):
 
 | File | What it is |
 |---|---|
@@ -204,6 +204,7 @@ In the `voice-mcp/` folder:
 | `download_model.py` | Downloads models from Hugging Face over parallel connections, resuming if interrupted |
 | `selftest.py` | A check that starts the server as an AI client would, reads two lines and transcribes them back |
 | `requirements.txt` | The library versions known to work |
+| `LICENSE` | MIT, for this code (the models keep their own licences) |
 | `examples/script-vi.txt`, `examples/script-en.txt` | Sample scripts in Vietnamese and English |
 
 **Data** lives outside the package, in `~/.cache/voice-mcp/` (change it with `VOICE_MCP_HOME`):
